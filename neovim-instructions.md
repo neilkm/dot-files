@@ -18,4 +18,4 @@ touch init.lua
 ## 3. Copy init.lua from this repo
 - Using neodev and his instructions https://github.com/folke/neodev.nvim.git
 - Lazyvim package manager https://www.lazyvim.org/
-  Still messing around with this
+*Still messing around with this*
