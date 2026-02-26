@@ -1,12 +1,16 @@
 # Neil Karkhanis's Dotfiles
 
-This repo contains a complete Neovim config in `./nvim`.
+This repo contains a complete Neovim config in `./nvim` and a zsh prompt config in `./shell/zsh`.
 
 ## What this setup does
 - Uses `lazy.nvim` as the plugin manager.
 - Starts with a dashboard that shows Neil's previous ASCII art.
 - Installs and configures Neo-tree.
 - Provides practical keymaps for files, search, buffers, and diagnostics.
+- Installs a custom zsh prompt:
+  - `User@Device full/path/to/current/dir [branch]*`
+  - Git branch is orange.
+  - `*` appears when there are uncommitted changes.
 
 ## Install (overwrite current Neovim config)
 Run:
@@ -15,7 +19,10 @@ Run:
 ./install.sh
 ```
 
-This script force-overwrites `~/.config/nvim` with `./nvim` from this repo.
+This script:
+- force-overwrites `~/.config/nvim` with `./nvim` from this repo
+- installs prompt config to `~/.config/neil-shell/prompt.zsh`
+- appends a source line to `~/.zshrc` (idempotent)
 
 ## Keymaps
 - `<Space>`: leader key
