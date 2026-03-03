@@ -46,6 +46,9 @@ require("lazy").setup({
         },
       },
       window = {
+        width = function()
+          return math.floor(vim.o.columns * 0.2)
+        end,
         mappings = {
           ["<space>"] = "none",
         },

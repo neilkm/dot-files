@@ -19,3 +19,4 @@ map("n", "<leader>lq", vim.diagnostic.setqflist, { desc = "Diagnostics to quickf
 
 map("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear search" })
 map("i", "jk", "<Esc>", { desc = "Exit insert mode" })
+map("t", "<C-Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
