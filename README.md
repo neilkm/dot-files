@@ -1,6 +1,6 @@
 # Neil Karkhanis's Dotfiles
 
-This repo contains a complete Neovim config in `./nvim` and a zsh prompt config in `./shell/zsh`.
+This repo contains a complete Neovim config in `./nvim`, a zsh prompt config in `./shell/zsh`, and a Kitty terminal config in `./kitty`.
 
 ## What this setup does
 - Uses `lazy.nvim` as the plugin manager.
@@ -11,6 +11,9 @@ This repo contains a complete Neovim config in `./nvim` and a zsh prompt config 
   - `User@Device full/path/to/current/dir [branch]*`
   - Git branch is orange.
   - `*` appears when there are uncommitted changes.
+- Shows a zsh startup banner with system stats.
+- Keeps ASCII art in a separate editable file: `./shell/zsh/login-banner-art.txt`.
+- Installs Kitty config from `./kitty/kitty.conf`.
 
 ## Install (overwrite current Neovim config)
 Run:
@@ -22,6 +25,8 @@ Run:
 This script:
 - force-overwrites `~/.config/nvim` with `./nvim` from this repo
 - installs prompt config to `~/.config/neil-shell/prompt.zsh`
+- installs banner art to `~/.config/neil-shell/login-banner-art.txt`
+- installs kitty config to `~/.config/kitty/kitty.conf`
 - appends a source line to `~/.zshrc` (idempotent)
 
 ## Keymaps
