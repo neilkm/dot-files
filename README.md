@@ -14,6 +14,8 @@ This repo contains a complete Neovim config in `./nvim`, a zsh prompt config in 
 - Shows a zsh startup banner with system stats.
 - Keeps ASCII art in a separate editable file: `./shell/zsh/login-banner-art.txt`.
 - Installs Kitty config from `./kitty/kitty.conf`.
+- Makes `kitty` new tabs/windows inherit the current working directory.
+- Emits OSC 7 cwd updates from zsh so terminal apps can inherit the current directory.
 
 ## Install (overwrite current Neovim config)
 Run:

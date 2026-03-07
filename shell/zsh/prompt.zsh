@@ -3,6 +3,15 @@ setopt prompt_subst
 
 [[ -o interactive ]] || return 0
 
+neil_update_terminal_cwd() {
+  local cwd url_path
+
+  cwd="${PWD:A}"
+  url_path="${cwd// /%20}"
+  url_path="${url_path//#/%23}"
+  printf '\e]7;file://%s%s\a' "${HOST:-localhost}" "$url_path"
+}
+
 neil_stat_host() {
   scutil --get ComputerName 2>/dev/null || hostname
 }
@@ -92,5 +101,8 @@ neil_set_prompt() {
 }
 
 add-zsh-hook precmd neil_set_prompt
+add-zsh-hook precmd neil_update_terminal_cwd
+add-zsh-hook chpwd neil_update_terminal_cwd
 neil_show_login_banner
+neil_update_terminal_cwd
 neil_set_prompt
