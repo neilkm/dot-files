@@ -1,7 +1,13 @@
 autoload -Uz add-zsh-hook
+autoload -Uz compinit
 setopt prompt_subst
 
 [[ -o interactive ]] || return 0
+
+if [[ -z "${_NEIL_ZSH_COMPINIT_DONE:-}" ]]; then
+  typeset -g _NEIL_ZSH_COMPINIT_DONE=1
+  compinit -i
+fi
 
 neil_update_terminal_cwd() {
   local cwd url_path

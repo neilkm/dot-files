@@ -11,6 +11,7 @@ This repo contains a complete Neovim config in `./nvim`, a zsh prompt config in 
   - `User@Device full/path/to/current/dir [branch]*`
   - Git branch is orange.
   - `*` appears when there are uncommitted changes.
+  - Enables zsh tab completion, including Git branch name completion.
 - Shows a zsh startup banner with system stats.
 - Keeps ASCII art in a separate editable file: `./shell/zsh/login-banner-art.txt`.
 - Installs Kitty config from `./kitty/kitty.conf`.
@@ -30,6 +31,7 @@ This script:
 - installs banner art to `~/.config/neil-shell/login-banner-art.txt`
 - installs kitty config to `~/.config/kitty/kitty.conf`
 - appends a source line to `~/.zshrc` (idempotent)
+- enables zsh completion through the installed prompt config
 
 ## Keymaps
 - `<Space>`: leader key
