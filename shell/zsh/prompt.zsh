@@ -66,9 +66,9 @@ neil_show_login_banner() {
 #  printf "    Host   : %s\n" "$(neil_stat_host)"
 #  printf "    OS     : %s\n" "$(neil_stat_os)"
 #  printf "    Kernel : %s\n" "$(uname -r)"
-  printf "||[ -This machine has been on for: %s\n" "$(neil_stat_uptime)"
-  printf "||[ -CPU: %s\n" "$(neil_stat_cpu)"
-  printf "||[ -Memory: %s\n" "$(neil_stat_memory)"
+  printf "[ -=- This machine has been on for: %s\n" "$(neil_stat_uptime)"
+  printf "[ -=- CPU: %s\n" "$(neil_stat_cpu)"
+  printf "[ -=- Memory: %s\n" "$(neil_stat_memory)"
 #  printf "    Disk   : %s\n" "$(neil_stat_disk)"
   printf "\n"
 }
