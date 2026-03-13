@@ -63,6 +63,11 @@ require("lazy").setup({
   },
 
   {
+    "numToStr/Comment.nvim",
+    opts = {},
+  },
+
+  {
     "goolord/alpha-nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()

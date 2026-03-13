@@ -48,6 +48,7 @@ This script:
 - `]d`: next diagnostic
 - `<leader>ld`: open diagnostic float
 - `<leader>lq`: send diagnostics to quickfix list
+- `<leader>gc`: toggle line comment
 - `<Esc>`: clear search highlight
 - `jk` (insert mode): escape to normal mode
 
