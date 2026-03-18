@@ -4,6 +4,14 @@ setopt prompt_subst
 
 [[ -o interactive ]] || return 0
 
+if command ls -G . >/dev/null 2>&1; then
+  export CLICOLOR=1
+  export LSCOLORS='ExFxBxDxCxegedabagacad'
+  alias ls='ls -laG'
+elif command ls --color=auto . >/dev/null 2>&1; then
+  alias ls='ls -la --color=auto'
+fi
+
 if [[ -z "${_NEIL_ZSH_COMPINIT_DONE:-}" ]]; then
   typeset -g _NEIL_ZSH_COMPINIT_DONE=1
   compinit -i
@@ -52,13 +60,84 @@ neil_stat_cpu() {
   uname -m
 }
 
+neil_parse_size_to_bytes() {
+  local value="$1"
+  local number unit multiplier
+
+  number="${value%[KMGT]}"
+  if [[ "$number" == "$value" ]]; then
+    unit=""
+  else
+    unit="${value#$number}"
+  fi
+
+  case "$unit" in
+    K) multiplier=1024 ;;
+    M) multiplier=$((1024 ** 2)) ;;
+    G) multiplier=$((1024 ** 3)) ;;
+    T) multiplier=$((1024 ** 4)) ;;
+    "") multiplier=1 ;;
+    *) return 1 ;;
+  esac
+
+  awk -v number="$number" -v multiplier="$multiplier" 'BEGIN { printf "%.0f", number * multiplier }'
+}
+
+neil_format_bytes_human() {
+  local bytes="$1"
+
+  awk -v bytes="$bytes" '
+    function fmt(value, unit) {
+      if (value >= 10 || value == int(value)) {
+        printf "%.0f%s", value, unit
+      } else {
+        printf "%.1f%s", value, unit
+      }
+    }
+    BEGIN {
+      if (bytes >= 1024 ^ 4) {
+        fmt(bytes / (1024 ^ 4), "T")
+      } else if (bytes >= 1024 ^ 3) {
+        fmt(bytes / (1024 ^ 3), "G")
+      } else if (bytes >= 1024 ^ 2) {
+        fmt(bytes / (1024 ^ 2), "M")
+      } else if (bytes >= 1024) {
+        fmt(bytes / 1024, "K")
+      } else {
+        printf "%dB", bytes
+      }
+    }
+  '
+}
+
+neil_banner_stat_line() {
+  local label="$1"
+  local value="$2"
+  local plain_text
+
+  plain_text=$(printf '%-13s %s' "$label" "$value")
+  printf '\033[38;2;222;195;109m || \033[0m'
+  printf '%-13s ' "$label"
+  printf '\033[38;5;46m%s\033[0m' "$value"
+  printf '%*s' "$((51 - ${#plain_text}))" ''
+  printf '\033[38;2;222;195;109m ||\033[0m\n'
+}
+
 neil_stat_memory() {
-  if command -v top >/dev/null 2>&1; then
-    local phys_mem
-    phys_mem="$(top -l 1 2>/dev/null | awk -F': ' '/PhysMem/ { print $2; exit }')"
-    if [[ -n "$phys_mem" ]]; then
-      printf "%s" "$phys_mem"
-      return 0
+  if command -v top >/dev/null 2>&1 && command -v sysctl >/dev/null 2>&1; then
+    local used_raw total_bytes used_bytes total_human used_human
+
+    used_raw="$(top -l 1 2>/dev/null | sed -nE 's/^PhysMem: ([0-9.]+[KMGT]?) used.*$/\1/p' | head -n 1)"
+    total_bytes="$(sysctl -n hw.memsize 2>/dev/null)"
+
+    if [[ -n "$used_raw" && -n "$total_bytes" ]]; then
+      used_bytes="$(neil_parse_size_to_bytes "$used_raw")"
+      if [[ -n "$used_bytes" ]]; then
+        used_human="$(neil_format_bytes_human "$used_bytes")"
+        total_human="$(neil_format_bytes_human "$total_bytes")"
+        printf "%s/%s" "$used_human" "$total_human"
+        return 0
+      fi
     fi
   fi
 
@@ -66,7 +145,7 @@ neil_stat_memory() {
 }
 
 neil_stat_disk() {
-  df -h / 2>/dev/null | awk 'NR == 2 { print $3 " / " $2 " (" $5 ")" }'
+  df -h / 2>/dev/null | awk 'NR == 2 { print $3 "/" $2 }'
 }
 
 neil_show_login_banner() {
@@ -77,14 +156,19 @@ neil_show_login_banner() {
   fi
   export NEIL_ZSH_LOGIN_BANNER_SHOWN=1
 
-  [[ -r "$art_file" ]] && cat "$art_file"
-#  printf "    Host   : %s\n" "$(neil_stat_host)"
-#  printf "    OS     : %s\n" "$(neil_stat_os)"
-#  printf "    Kernel : %s\n" "$(uname -r)"
-  printf "[ -=- This machine has been on for: %s\n" "$(neil_stat_uptime)"
-  printf "[ -=- CPU: %s\n" "$(neil_stat_cpu)"
-  printf "[ -=- Memory: %s\n" "$(neil_stat_memory)"
-#  printf "    Disk   : %s\n" "$(neil_stat_disk)"
+  if [[ -r "$art_file" ]]; then
+    printf '\033[38;2;237;21;176m'
+    cat -- "$art_file"
+    printf '\033[0m'
+  fi
+  printf '\033[38;2;222;195;109m __                                                     __\n\033[0m'
+  printf '\033[38;2;222;195;109m{||}==================================================={||}\n\033[0m'
+  neil_banner_stat_line "Uptime:" "$(neil_stat_uptime)"
+  neil_banner_stat_line "CPU:" "$(neil_stat_cpu)"
+  neil_banner_stat_line "Memory:" "$(neil_stat_memory)"
+  neil_banner_stat_line "Storage:" "$(neil_stat_disk)"
+  printf '\033[38;2;222;195;109m{||}==================================================={||}\n\033[0m'
+  printf '\033[38;2;222;195;109m ¯¯                                                     ¯¯\n\033[0m'
   printf "\n"
 }
 
@@ -102,8 +186,33 @@ neil_git_prompt_segment() {
   printf ' %%F{214}[%s]%%f%s' "$branch" "$dirty"
 }
 
+neil_truncated_pwd() {
+  local -a parts tail_parts
+  local path prefix
+
+  path="${PWD/#$HOME/~}"
+  parts=(${(s:/:)path})
+
+  if (( ${#parts[@]} <= 3 )); then
+    printf "%s" "$path"
+    return 0
+  fi
+
+  tail_parts=("${parts[@]: -3}")
+  prefix="..."
+
+  if [[ "$path" == /* ]]; then
+    prefix=".../"
+  elif [[ "$path" == ~/* ]]; then
+    prefix=".../"
+  fi
+
+  printf "%s%s" "$prefix" "${(j:/:)tail_parts}"
+}
+
 neil_set_prompt() {
-  PROMPT='%n@%m %/$(neil_git_prompt_segment) '
+  PROMPT='├%F{117}[%n@%m]%f $(neil_truncated_pwd)$(neil_git_prompt_segment)
+└ $ '
 }
 
 add-zsh-hook precmd neil_set_prompt

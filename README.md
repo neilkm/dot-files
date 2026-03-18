@@ -7,16 +7,22 @@ This repo contains a complete Neovim config in `./nvim`, a zsh prompt config in 
 - Starts with a dashboard that shows Neil's previous ASCII art.
 - Installs and configures Neo-tree.
 - Provides practical keymaps for files, search, buffers, and diagnostics.
-- Installs a custom zsh prompt:
-  - `User@Device full/path/to/current/dir [branch]*`
-  - Git branch is orange.
-  - `*` appears when there are uncommitted changes.
-  - Enables zsh tab completion, including Git branch name completion.
-- Shows a zsh startup banner with system stats.
+- Installs a custom interactive zsh setup:
+  - enables `compinit` once per shell session
+  - aliases `ls` to `ls -laG` on macOS, with file-type colors enabled
+  - falls back to `ls -la --color=auto` on systems with GNU `ls`
+  - uses a two-line prompt
+  - shows a light-blue `[%n@%m]` host segment
+  - truncates the displayed working directory to the last 3 path segments and prepends `.../` when deeper
+  - shows the current Git branch in orange and appends `*` when the worktree is dirty
+  - starts input on a second line prefixed with `└ $`
+- Shows a zsh startup banner with:
+  - banner art loaded from `./shell/zsh/login-banner-art.txt`
+  - a framed stats block for uptime, CPU, memory usage, and storage usage
+  - OSC 7 cwd updates so terminal apps can inherit the current directory
 - Keeps ASCII art in a separate editable file: `./shell/zsh/login-banner-art.txt`.
 - Installs Kitty config from `./kitty/kitty.conf`.
 - Makes `kitty` new tabs/windows inherit the current working directory.
-- Emits OSC 7 cwd updates from zsh so terminal apps can inherit the current directory.
 
 ## Install (overwrite current Neovim config)
 Run:
@@ -32,6 +38,7 @@ This script:
 - installs kitty config to `~/.config/kitty/kitty.conf`
 - appends a source line to `~/.zshrc` (idempotent)
 - enables zsh completion through the installed prompt config
+- updates the shell prompt and banner behavior described above
 
 ## Keymaps
 - `<Space>`: leader key
@@ -55,3 +62,5 @@ This script:
 ## Notes
 - First start may take longer while plugins install.
 - Requires Neovim 0.9+ (0.10+ recommended).
+- The startup banner is shown once per interactive zsh session.
+- Login-shell messages such as `Last login` or `You have new mail.` come from the system, not from this repo.
