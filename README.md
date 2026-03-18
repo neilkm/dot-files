@@ -6,16 +6,25 @@ This repo contains a complete Neovim config in `./nvim`, a zsh prompt config in 
 - Uses `lazy.nvim` as the plugin manager.
 - Starts with a dashboard that shows Neil's previous ASCII art.
 - Installs and configures Neo-tree.
+  - `<leader>e` toggles Neo-tree in the current window instead of opening a global sidebar
+  - existing splits do not auto-resize when a new split is created (`noea`)
 - Provides practical keymaps for files, search, buffers, and diagnostics.
 - Installs a custom interactive zsh setup:
   - enables `compinit` once per shell session
-  - aliases `ls` to `ls -laG` on macOS, with file-type colors enabled
-  - falls back to `ls -la --color=auto` on systems with GNU `ls`
+  - enables file-type colors for `ls`
   - uses a two-line prompt
   - shows a light-blue `[%n@%m]` host segment
   - truncates the displayed working directory to the last 3 path segments and prepends `.../` when deeper
   - shows the current Git branch in orange and appends `*` when the worktree is dirty
   - starts input on a second line prefixed with `└ $`
+  - defines shell aliases:
+    - `la`: `ls -laG` on macOS, `ls -la --color=auto` with GNU `ls`
+    - `ll`: `ls -lG` on macOS, `ls -l --color=auto` with GNU `ls`
+    - `gs`: `git status`
+    - `gc`: `git commit`
+    - `ga`: `git add --all`
+    - `gp`: `git push`
+    - `gg`: `git gui`
 - Shows a zsh startup banner with:
   - banner art loaded from `./shell/zsh/login-banner-art.txt`
   - a framed stats block for uptime, CPU, memory usage, and storage usage
@@ -42,7 +51,8 @@ This script:
 
 ## Keymaps
 - `<Space>`: leader key
-- `<leader>e`: toggle Neo-tree file explorer
+- `<leader>e`: toggle Neo-tree in the current window
+- `<leader>t`: focus an existing terminal split, or open a new terminal at the bottom at about 15% height
 - `<leader>ff`: find files (Telescope)
 - `<leader>fg`: live grep (Telescope)
 - `<leader>fb`: list open buffers (Telescope)
@@ -51,6 +61,10 @@ This script:
 - `<leader>q`: quit window
 - `<leader>x`: close current buffer
 - `<leader>bd`: delete current buffer
+- `<C-h>` / `<C-Left>`: focus split to the left
+- `<C-j>` / `<C-Down>`: focus split below
+- `<C-k>` / `<C-Up>`: focus split above
+- `<C-l>` / `<C-Right>`: focus split to the right
 - `[d`: previous diagnostic
 - `]d`: next diagnostic
 - `<leader>ld`: open diagnostic float
