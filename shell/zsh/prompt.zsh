@@ -7,10 +7,18 @@ setopt prompt_subst
 if command ls -G . >/dev/null 2>&1; then
   export CLICOLOR=1
   export LSCOLORS='ExFxBxDxCxegedabagacad'
-  alias ls='ls -laG'
+  alias lsa='ls -laG'
+  alias ll='ls -lG'
 elif command ls --color=auto . >/dev/null 2>&1; then
-  alias ls='ls -la --color=auto'
+  alias lsa='ls -la --color=auto'
+  alias ll='ls -l --color=auto'
 fi
+
+alias gs='git status'
+alias gc='git commit'
+alias ga='git add --all'
+alias gp='git push'
+alias gg='git gui'
 
 if [[ -z "${_NEIL_ZSH_COMPINIT_DONE:-}" ]]; then
   typeset -g _NEIL_ZSH_COMPINIT_DONE=1
@@ -163,10 +171,10 @@ neil_show_login_banner() {
   fi
   printf '\033[38;2;222;195;109m __                                                     __\n\033[0m'
   printf '\033[38;2;222;195;109m{||}==================================================={||}\n\033[0m'
-  neil_banner_stat_line "Uptime:" "$(neil_stat_uptime)"
-  neil_banner_stat_line "CPU:" "$(neil_stat_cpu)"
-  neil_banner_stat_line "Memory:" "$(neil_stat_memory)"
-  neil_banner_stat_line "Storage:" "$(neil_stat_disk)"
+  neil_banner_stat_line "  Uptime:" "$(neil_stat_uptime)"
+  neil_banner_stat_line "  CPU:" "$(neil_stat_cpu)"
+  neil_banner_stat_line "  Memory:" "$(neil_stat_memory)"
+  neil_banner_stat_line "  Storage:" "$(neil_stat_disk)"
   printf '\033[38;2;222;195;109m{||}==================================================={||}\n\033[0m'
   printf '\033[38;2;222;195;109m ¯¯                                                     ¯¯\n\033[0m'
   printf "\n"
@@ -211,8 +219,8 @@ neil_truncated_pwd() {
 }
 
 neil_set_prompt() {
-  PROMPT='├%F{117}[%n@%m]%f $(neil_truncated_pwd)$(neil_git_prompt_segment)
-└ $ '
+  PROMPT='%F{12}┌─[%n@%m]%f%F{205} $(neil_truncated_pwd)$(neil_git_prompt_segment)%f
+%F{12}└─%f$ '
 }
 
 add-zsh-hook precmd neil_set_prompt
