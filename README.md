@@ -8,6 +8,8 @@ This repo contains a complete Neovim config in `./nvim`, a zsh prompt config in 
 - Installs and configures Neo-tree.
   - `<leader>e` toggles Neo-tree in the current window instead of opening a global sidebar
   - existing splits do not auto-resize when a new split is created (`noea`)
+- Automatically reloads files changed outside Neovim when focus returns to the app or window.
+- Automatically closes unmodified buffers whose files were deleted on disk.
 - Provides practical keymaps for files, search, buffers, and diagnostics.
 - Installs a custom interactive zsh setup:
   - enables `compinit` once per shell session

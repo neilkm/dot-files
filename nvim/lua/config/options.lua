@@ -19,3 +19,4 @@ opt.splitright = true
 opt.splitbelow = true
 opt.equalalways = false
 opt.undofile = true
+opt.autoread = true
