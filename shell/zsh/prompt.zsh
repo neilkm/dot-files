@@ -15,6 +15,7 @@ elif command ls --color=auto . >/dev/null 2>&1; then
 fi
 
 alias gs='git status'
+alias gl='git log'
 alias gc='git commit'
 alias ga='git add --all'
 alias gp='git push'

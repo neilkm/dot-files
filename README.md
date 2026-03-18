@@ -23,6 +23,7 @@ This repo contains a complete Neovim config in `./nvim`, a zsh prompt config in 
     - `la`: `ls -laG` on macOS, `ls -la --color=auto` with GNU `ls`
     - `ll`: `ls -lG` on macOS, `ls -l --color=auto` with GNU `ls`
     - `gs`: `git status`
+    - `gl`: `git log`
     - `gc`: `git commit`
     - `ga`: `git add --all`
     - `gp`: `git push`
