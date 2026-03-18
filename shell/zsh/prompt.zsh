@@ -7,10 +7,10 @@ setopt prompt_subst
 if command ls -G . >/dev/null 2>&1; then
   export CLICOLOR=1
   export LSCOLORS='ExFxBxDxCxegedabagacad'
-  alias lsa='ls -laG'
+  alias la='ls -laG'
   alias ll='ls -lG'
 elif command ls --color=auto . >/dev/null 2>&1; then
-  alias lsa='ls -la --color=auto'
+  alias la='ls -la --color=auto'
   alias ll='ls -l --color=auto'
 fi
 
