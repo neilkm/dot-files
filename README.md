@@ -1,6 +1,6 @@
 # Neil Karkhanis's Dotfiles
 
-This repo contains a complete Neovim config in `./nvim`, a zsh prompt config in `./shell/zsh`, and a Kitty terminal config in `./kitty`.
+This repo contains a complete Neovim config in `./nvim`, a zsh prompt config in `./shell/zsh`, a Kitty terminal config in `./kitty`, and a tmux config in `./tmux`.
 
 ## What this setup does
 - Uses `lazy.nvim` as the plugin manager.
@@ -35,6 +35,11 @@ This repo contains a complete Neovim config in `./nvim`, a zsh prompt config in 
 - Keeps ASCII art in a separate editable file: `./shell/zsh/login-banner-art.txt`.
 - Installs Kitty config from `./kitty/kitty.conf`.
 - Makes `kitty` new tabs/windows inherit the current working directory.
+- Installs tmux config from `./tmux/tmux.conf`.
+- Adds tmux split shortcuts:
+  - `Ctrl-b` then `|`: vertical split
+  - `Ctrl-b` then `-`: horizontal split
+- Enables tmux mouse support.
 
 ## Install (overwrite current Neovim config)
 Run:
@@ -48,6 +53,7 @@ This script:
 - installs prompt config to `~/.config/neil-shell/prompt.zsh`
 - installs banner art to `~/.config/neil-shell/login-banner-art.txt`
 - installs kitty config to `~/.config/kitty/kitty.conf`
+- installs tmux config to `~/.tmux.conf`
 - appends a source line to `~/.zshrc` (idempotent)
 - enables zsh completion through the installed prompt config
 - updates the shell prompt and banner behavior described above

@@ -7,11 +7,13 @@ TARGET_DIR="$HOME/.config/nvim"
 PROMPT_SOURCE="$REPO_DIR/shell/zsh/prompt.zsh"
 PROMPT_ART_SOURCE="$REPO_DIR/shell/zsh/login-banner-art.txt"
 KITTY_SOURCE="$REPO_DIR/kitty/kitty.conf"
+TMUX_SOURCE="$REPO_DIR/tmux/tmux.conf"
 PROMPT_TARGET_DIR="$HOME/.config/neil-shell"
 PROMPT_TARGET="$PROMPT_TARGET_DIR/prompt.zsh"
 PROMPT_ART_TARGET="$PROMPT_TARGET_DIR/login-banner-art.txt"
 KITTY_TARGET_DIR="$HOME/.config/kitty"
 KITTY_TARGET="$KITTY_TARGET_DIR/kitty.conf"
+TMUX_TARGET="$HOME/.tmux.conf"
 ZSHRC_FILE="$HOME/.zshrc"
 PROMPT_SOURCE_LINE='[[ -f "$HOME/.config/neil-shell/prompt.zsh" ]] && source "$HOME/.config/neil-shell/prompt.zsh"'
 
@@ -35,6 +37,11 @@ if [[ ! -f "$KITTY_SOURCE" ]]; then
   exit 1
 fi
 
+if [[ ! -f "$TMUX_SOURCE" ]]; then
+  echo "Error: tmux config not found at $TMUX_SOURCE" >&2
+  exit 1
+fi
+
 mkdir -p "$HOME/.config"
 rm -rf "$TARGET_DIR"
 cp -R "$SOURCE_DIR" "$TARGET_DIR"
@@ -45,6 +52,8 @@ cp "$PROMPT_ART_SOURCE" "$PROMPT_ART_TARGET"
 
 mkdir -p "$KITTY_TARGET_DIR"
 cp "$KITTY_SOURCE" "$KITTY_TARGET"
+
+cp "$TMUX_SOURCE" "$TMUX_TARGET"
 
 if ! grep -Fq "$PROMPT_SOURCE_LINE" "$ZSHRC_FILE" 2>/dev/null; then
   printf "\n%s\n" "$PROMPT_SOURCE_LINE" >> "$ZSHRC_FILE"
@@ -57,4 +66,5 @@ echo "Installed: $TARGET_DIR"
 echo "Installed: $PROMPT_TARGET"
 echo "Installed: $PROMPT_ART_TARGET"
 echo "Installed: $KITTY_TARGET"
+echo "Installed: $TMUX_TARGET"
 echo "Updated: $ZSHRC_FILE"
